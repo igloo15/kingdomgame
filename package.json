@@ -1,0 +1,40 @@
+{
+  "name": "kingdomgame",
+  "version": "0.1.0",
+  "description": "A game of kingdoms rise and fall",
+  "main": "index.js",
+  "scripts": {
+    "serve": "webpack-dev-server --open",
+    "build": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/igloo15/kingdomgame.git"
+  },
+  "keywords": [
+    "game",
+    "typescript",
+    "d3"
+  ],
+  "author": "igloo15",
+  "license": "MIT",
+  "private": true,
+  "bugs": {
+    "url": "https://github.com/igloo15/kingdomgame/issues"
+  },
+  "homepage": "https://github.com/igloo15/kingdomgame#readme",
+  "devDependencies": {
+    "clean-webpack-plugin": "^3.0.0",
+    "css-loader": "^3.2.0",
+    "file-loader": "^4.2.0",
+    "html-webpack-plugin": "^3.2.0",
+    "style-loader": "^1.0.0",
+    "ts-loader": "^6.0.4",
+    "tslint": "^5.19.0",
+    "typescript": "^3.6.2",
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.7",
+    "webpack-dev-server": "^3.8.0"
+  }
+}
