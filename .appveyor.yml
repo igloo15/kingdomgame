@@ -12,6 +12,9 @@ install:
 build_script:
   - npm run build
 
+artifacts:
+  - path: dist/**/*.*
+
 deploy:
   provider: FTP
   protocol: sftp
@@ -19,7 +22,7 @@ deploy:
   username: igloo15
   password:
     secure: 0HG1zILT/P1jlh4uy0f8FA==
-  folder: dist
+  folder: /kingdom.igloo15.com/
 
 branches:
   # Whitelist
