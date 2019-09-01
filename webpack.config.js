@@ -1,6 +1,10 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const webpack = require('webpack');
+
+const pkg = require('./package.json');
+
 
 module.exports = {
   entry: './src/index.ts',
@@ -31,10 +35,14 @@ module.exports = {
     contentBase: './dist'
   },
   plugins: [
+    new webpack.DefinePlugin({
+      VERSION: JSON.stringify(pkg.version)
+    }),
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       title: 'Kingdom Game',
-      template: 'src/index.html'
+      template: 'src/index.html',
+      version: pkg.version
     })
   ],
   resolve: {

@@ -1,6 +1,6 @@
 {
   "name": "kingdomgame",
-  "version": "0.1.0",
+  "version": "0.2.0-dev.7",
   "description": "A game of kingdoms rise and fall",
   "main": "index.js",
   "scripts": {
@@ -19,7 +19,9 @@
     "typescript",
     "d3"
   ],
-  "author": "igloo15",
+  "author": {
+    "name": "igloo15"
+  },
   "license": "MIT",
   "private": true,
   "bugs": {
@@ -41,5 +43,7 @@
     "webpack-cli": "^3.3.7",
     "webpack-dev-server": "^3.8.0",
     "write-pkg": "^4.0.0"
-  }
+  },
+  "readme": "ERROR: No README data found!",
+  "_id": "kingdomgame@0.1.0"
 }

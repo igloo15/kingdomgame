@@ -4,7 +4,7 @@ const readPkg = require('read-pkg');
 
 const gitInfo = gitDescribeSync(__dirname+"/..");
 const pkg = readPkg.sync();
-console.log(gitInfo);
+
 let version = gitInfo.semver.version;
 
 if(gitInfo.distance > 0) {
