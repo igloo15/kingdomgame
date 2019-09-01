@@ -10,8 +10,7 @@ install:
   - npm install
 
 build_script:
-  - npm build
-
+  - npm run build
 
 deploy:
   provider: FTP
@@ -29,6 +28,3 @@ branches:
     - master
     - /release/.*/
     - /hotfix/.*/
-
-cache:
-- tools -> recipe.cake, tools/packages.config
