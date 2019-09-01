@@ -9,6 +9,19 @@ install:
   # install modules
   - npm install
 
+build_script:
+  - npm build
+
+
+deploy:
+  provider: FTP
+  protocol: sftp
+  host: igloo15.com
+  username: igloo15
+  password:
+    secure: G+1uj5hFgNOeSb8uWVeW5hzqqYOl7doFOnGctMC2C7k=
+  folder: dist
+
 branches:
   # Whitelist
   only:
