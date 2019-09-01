@@ -13,7 +13,7 @@ build_script:
   - npm run build
 
 after_build:
-  - ps: Get-ChildItem .\dist\**\*.* | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
+  - ps: $root = Resolve-Path .\dist; [IO.Directory]::GetFiles($root.Path, '*.*', 'AllDirectories') | % { Push-AppveyorArtifact $_ -FileName $_.Substring($root.Path.Length + 1) -DeploymentName to-publish }
 
 deploy:
   provider: FTP
