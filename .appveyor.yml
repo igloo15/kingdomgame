@@ -12,8 +12,8 @@ install:
 build_script:
   - npm run build
 
-artifacts:
-  - path: dist/**/*.*
+after_build:
+  - ps: Get-ChildItem .\dist\**\*.* | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
 
 deploy:
   provider: FTP
