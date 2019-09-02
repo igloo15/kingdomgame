@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { GameService } from 'src/app/services/game.service';
 import { MatDialog } from '@angular/material/dialog';
 import { GameJsonDialogComponent } from '../game-json-dialog/game-json-dialog.component';
+import { version } from '../../../../package.json';
 
 @Component({
   selector: 'kingdom-game-details',
@@ -9,6 +10,8 @@ import { GameJsonDialogComponent } from '../game-json-dialog/game-json-dialog.co
   styleUrls: ['./game-details.component.scss']
 })
 export class GameDetailsComponent implements OnInit {
+
+  public version = version;
 
   constructor(public gameService: GameService, private dialog: MatDialog) { }
 
@@ -28,6 +31,26 @@ export class GameDetailsComponent implements OnInit {
 
   onRestart() {
     this.gameService.restart();
+  }
+
+  onClear() {
+    this.gameService.clearMap();
+  }
+
+  onGenerateWater() {
+    this.gameService.generateWater();
+  }
+
+  onGenerateBorders() {
+    this.gameService.generateBorders();
+  }
+
+  onGenerateArea() {
+    this.gameService.generateArea();
+  }
+
+  onRegenerate() {
+    this.gameService.newMap();
   }
 
 }

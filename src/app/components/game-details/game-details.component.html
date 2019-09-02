@@ -10,8 +10,14 @@
         <button mat-raised-button (click)="onShowFile()">Show File</button>
         <button mat-raised-button (click)="onRestart()">Restart</button>
     </div>
-    <div fxFlex="80">
-        Test
+    <div fxFlex="15" fxLayout="column" fxLayoutGap="10px">
+        <button mat-raised-button (click)="onClear()">Clear Map</button>
+        <button mat-raised-button (click)="onGenerateWater()">Generate Water</button>
+        <button mat-raised-button (click)="onGenerateBorders()">Generate Borders</button>
+        <button mat-raised-button (click)="onGenerateArea()">Generate Area</button>
+        <button mat-raised-button (click)="onRegenerate()">Regenerate Map</button>
     </div>
-
+    <div fxFlex="15" fxLayout="column" fxLayoutAlign="end end">
+        <div>Version: {{version}}</div>
+    </div>
 </div>

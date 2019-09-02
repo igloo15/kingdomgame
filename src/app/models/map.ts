@@ -1,11 +1,20 @@
 import * as d3 from 'd3';
-import { GridBox } from './grid-box';
+import { GridBox, DirectionGridBox } from './grid-box';
+import { Constants } from './constants';
+import { MapGenerator } from './map-generator';
+import { GameArea } from './area';
 
 export class Map {
 
-    public parentElem: HTMLElement;
-    public svg: d3.Selection<SVGSVGElement, unknown, null, undefined>;
-    public gridGroup: d3.Selection<d3.BaseType, GridBox, SVGGElement, unknown>;
+    private parentElem: HTMLElement;
+    private svg: d3.Selection<SVGSVGElement, unknown, null, undefined>;
+    private gridGroup: d3.Selection<SVGGElement, unknown, null, undefined>;
+    private borderGroup: d3.Selection<SVGGElement, unknown, null, undefined>;
+    private lineFunction: d3.Line<[number, number]>;
+
+    public numberOfRows: number;
+    public numberOfColumns: number;
+    public numOfAreas = 0;
     public pixelWidth;
     public pixelHeight;
     public gridSize = 10;
@@ -13,30 +22,33 @@ export class Map {
     public margin = 10;
 
     public boxes: GridBox[] = [];
+    public borders: number[][][] = [];
+    public areas: GameArea[] = [];
 
-    constructor(parent: HTMLElement, gridSize: number) {
-        this.parentElem = parent;
+    public badlands = new GameArea('The BadLands', Constants.badlandType, []);
+
+    constructor(gridSize: number) {
         if (gridSize) {
             this.gridSize = gridSize;
             this.gridHalfSize = this.gridSize / 2;
         }
     }
 
-    public initialize() {
+    public initialize(parent: HTMLElement) {
+        this.parentElem = parent;
         this.updateDimensions();
-        const numberOfRows = Math.floor((this.pixelHeight - this.margin) / this.gridSize);
-        const numberOfColumns = Math.floor((this.pixelWidth - this.margin) / this.gridSize);
-        const allRowSize = numberOfRows * this.gridSize;
-        const allColumnSize = numberOfColumns * this.gridSize;
+        this.numberOfRows = Math.floor((this.pixelHeight - this.margin) / this.gridSize);
+        this.numberOfColumns = Math.floor((this.pixelWidth - this.margin) / this.gridSize);
+        const allRowSize = this.numberOfRows * this.gridSize;
+        const allColumnSize = this.numberOfColumns * this.gridSize;
         const topMargin = (this.pixelHeight - allRowSize) / 2;
         const leftMargin = (this.pixelWidth - allColumnSize) / 2;
 
-        for (let x = 0; x < numberOfColumns; x++) {
-            for (let y = 0; y < numberOfRows; y++) {
+        for (let x = 0; x < this.numberOfColumns; x++) {
+            for (let y = 0; y < this.numberOfRows; y++) {
                 this.boxes.push(new GridBox(x, y, this.gridSize));
             }
         }
-
 
         this.svg = d3.select(this.parentElem).append('svg')
             .attr('width', this.pixelWidth)
@@ -44,42 +56,125 @@ export class Map {
 
         this.gridGroup = this.svg
             .append('g')
-            .attr('transform', 'translate(' + leftMargin + ',' + topMargin + ')')
-            .selectAll('.gridbox')
-            .data(this.boxes);
+            .attr('transform', 'translate(' + leftMargin + ',' + topMargin + ')');
 
-        this.gridGroup
-            .enter()
-            .append('rect')
-            .attr('class', '.gridbox')
-            .attr('x', d => d.actualX - this.gridHalfSize)
-            .attr('y', d => d.actualY - this.gridHalfSize)
-            .attr('width', this.gridSize)
-            .attr('height', this.gridSize)
-            .attr('fill', 'teal')
-            .attr('stroke', 'white')
-            .attr('stroke-width', '1px');
+        this.borderGroup = this.svg
+            .append('g')
+            .attr('transform', 'translate(' + leftMargin + ',' + topMargin + ')');
+
+        this.lineFunction = d3.line()
+            .x((d) => d[0])
+            .y((d) => d[1]);
+
+
+        this.redraw();
+
+        MapGenerator.generateAllWater(this);
+
+        MapGenerator.generateAllAreas(this);
+
+        this.borders = MapGenerator.generateBorders(this);
+    }
+
+    public clear() {
+        this.boxes.forEach(b => {
+            b.reset();
+        });
+        this.borders = [];
     }
 
     public redraw() {
-        const currentGroup = this.gridGroup.data(this.boxes);
-        currentGroup
-            .enter()
-            .append('rect')
-            .attr('class', '.gridbox')
-            .attr('x', d => d.x - this.gridHalfSize)
-            .attr('y', d => d.y - this.gridHalfSize)
-            .attr('width', this.gridSize)
-            .attr('height', this.gridSize)
-            .attr('fill', 'teal')
-            .attr('stroke', 'white')
-            .attr('stroke-width', '1px');
-
-        currentGroup.exit().remove();
+        requestAnimationFrame(() => {
+            this.redrawGrid();
+            this.redrawBorders();
+        });
     }
 
     public updateDimensions() {
         this.pixelHeight = this.parentElem.clientHeight;
         this.pixelWidth = this.parentElem.clientWidth;
+    }
+
+    public redrawBorders() {
+        const lineGroup = this.borderGroup.selectAll('.lineData').data(this.borders);
+
+        lineGroup.enter()
+            .append('path')
+            .attr('d', this.lineFunction)
+            .attr('class', 'lineData')
+            .attr('stroke', 'black')
+            .attr('stroke-width', 1.75)
+            .attr('fill', 'none');
+
+        lineGroup.exit().remove();
+    }
+
+    public redrawGrid() {
+        const currentGroup = this.gridGroup.selectAll('.gridbox').data(this.boxes);
+        currentGroup
+            .enter()
+            .append('rect')
+            .attr('class', 'gridbox')
+            .attr('x', d => d.actualX)
+            .attr('y', d => d.actualY)
+            .attr('width', this.gridSize)
+            .attr('height', this.gridSize)
+            .attr('stroke', 'white')
+            .attr('stroke-width', '1px')
+            .attr('fill', d => {
+                if (d.type === Constants.waterType) {
+                    return 'blue';
+                } else if (d.type === '') {
+                    return 'teal';
+                } else if (d.type === Constants.badlandType) {
+                    return '#581845';
+                } else {
+                    return 'white';
+                }
+            });
+
+        currentGroup
+            .transition()
+            .attr('fill', d => {
+                if (d.type === Constants.waterType) {
+                    return 'blue';
+                } else if (d.type === '') {
+                    return 'teal';
+                } else if (d.type === Constants.badlandType) {
+                    return '#581845';
+                } else {
+                    return 'white';
+                }
+            })
+            .delay((d, i) => d.drawDelay);
+
+        currentGroup.exit().remove();
+    }
+
+    public getAttachedBoxes(box: GridBox) {
+        const attachedCoordinates = box.getAttachedBoxes();
+        const attachedBoxes: DirectionGridBox[] = [];
+
+        for (let i = 0; i < 4; i++) {
+            const coordinate = attachedCoordinates[i];
+            let dir = 'north';
+            if (i === 1) {
+                dir = 'east';
+            } else if (i === 2) {
+                dir = 'south';
+            } else if (i === 3) {
+                dir = 'west';
+            }
+            attachedBoxes.push({
+                direction: dir,
+                box: this.getBox(coordinate[0], coordinate[1])
+            });
+        }
+
+        return attachedBoxes;
+    }
+
+    public getBox(x: number, y: number): GridBox {
+        return this.boxes.find(b => b.x === x && b.y === y);
     }
 }
