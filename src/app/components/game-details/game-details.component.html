@@ -1,0 +1,17 @@
+<div class="game-details-panel" fxFlexFill fxLayout="row" fxLayoutGap="10px">
+    <div fxFlex="15" fxLayout="column" fxLayoutGap="10px">
+        <mat-form-field>
+            <input matInput placeholder="Game Name" [(ngModel)]="this.gameService.saveFile.name">
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput placeholder="Last Save" disabled [ngModel]="this.gameService.saveFile.lastSave | date:'short'">
+        </mat-form-field>
+        <button mat-raised-button (click)="onSave()">Save</button>
+        <button mat-raised-button (click)="onShowFile()">Show File</button>
+        <button mat-raised-button (click)="onRestart()">Restart</button>
+    </div>
+    <div fxFlex="80">
+        Test
+    </div>
+
+</div>

@@ -4,9 +4,9 @@
   "description": "A game of kingdoms rise and fall",
   "main": "index.js",
   "scripts": {
-    "serve": "webpack-dev-server --open",
+    "serve": "ng serve",
     "update-version": "node ./configs/update-version.js",
-    "build": "webpack",
+    "build": "ng build --prod",
     "deploy": "npm run update-version && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -28,22 +28,41 @@
     "url": "https://github.com/igloo15/kingdomgame/issues"
   },
   "homepage": "https://github.com/igloo15/kingdomgame#readme",
-  "devDependencies": {
-    "clean-webpack-plugin": "^3.0.0",
-    "css-loader": "^3.2.0",
-    "file-loader": "^4.2.0",
-    "git-describe": "^4.0.4",
-    "html-webpack-plugin": "^3.2.0",
-    "read-pkg": "^5.2.0",
-    "style-loader": "^1.0.0",
-    "ts-loader": "^6.0.4",
-    "tslint": "^5.19.0",
-    "typescript": "^3.6.2",
-    "webpack": "^4.39.3",
-    "webpack-cli": "^3.3.7",
-    "webpack-dev-server": "^3.8.0",
-    "write-pkg": "^4.0.0"
-  },
   "readme": "ERROR: No README data found!",
-  "_id": "kingdomgame@0.1.0"
+  "_id": "kingdomgame@0.1.0",
+  "dependencies": {
+    "@angular/animations": "^8.2.4",
+    "@angular/cdk": "^8.1.4",
+    "@angular/common": "~8.2.4",
+    "@angular/compiler": "~8.2.4",
+    "@angular/core": "~8.2.4",
+    "@angular/flex-layout": "^8.0.0-beta.27",
+    "@angular/forms": "~8.2.4",
+    "@angular/material": "^8.1.4",
+    "@angular/platform-browser": "~8.2.4",
+    "@angular/platform-browser-dynamic": "~8.2.4",
+    "@angular/router": "~8.2.4",
+    "core-js": "^2.5.4",
+    "d3": "^5.11.0",
+    "guid-typescript": "^1.0.9",
+    "ngx-logger": "^4.0.4",
+    "rxjs": "~6.5.2",
+    "tslib": "^1.10.0",
+    "zone.js": "~0.9.1"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^0.803.2",
+    "@angular/cli": "~8.3.2",
+    "@angular/compiler-cli": "~8.2.4",
+    "@angular/language-service": "~8.2.4",
+    "@types/d3": "^5.7.2",
+    "@types/node": "~8.9.4",
+    "codelyzer": "~5.1.0",
+    "git-describe": "^4.0.4",
+    "read-pkg": "^5.2.0",
+    "ts-node": "~7.0.0",
+    "tslint": "^5.11.0",
+    "typescript": "~3.5.3",
+    "write-pkg": "^4.0.0"
+  }
 }
