@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { GameService } from 'src/app/services/game.service';
 import { MatDialog } from '@angular/material/dialog';
 import { GameJsonDialogComponent } from '../game-json-dialog/game-json-dialog.component';
-import { version } from '../../../../package.json';
+import { version, date } from '../../../../package.json';
 
 @Component({
   selector: 'kingdom-game-details',
@@ -12,6 +12,7 @@ import { version } from '../../../../package.json';
 export class GameDetailsComponent implements OnInit {
 
   public version = version;
+  public date = date;
 
   constructor(public gameService: GameService, private dialog: MatDialog) { }
 

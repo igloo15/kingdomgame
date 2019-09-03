@@ -1,8 +1,8 @@
 
 export class Constants {
-    public static mapGridSize = 50;
+    public static mapGridSize = 40;
     public static areaMaxSize = 30;
-    public static areaMinSize = 5;
+    public static areaMinSize = 7;
     public static areaPasses = 100;
     public static areaGrowPasses = 3000;
     public static waterFactor = 1;
