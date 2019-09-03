@@ -2,7 +2,6 @@ import { Constants } from './constants';
 import { Map } from './map';
 import { GameUtil } from './utility';
 import { GameArea } from './area';
-import { area } from 'd3';
 
 export class MapGenerator {
 
@@ -91,6 +90,8 @@ export class MapGenerator {
         }
 
         MapGenerator.cleanUpAreas(map);
+
+        map.areas.forEach(a => a.checkIfEnemy());
     }
 
     public static generateArea(map: Map) {
@@ -103,7 +104,7 @@ export class MapGenerator {
             const myType = `New Area ${map.areas.length}`;
             const newArea = new GameArea(myType, myType, []);
             newArea.addBox(startBox);
-            for (let i = 0; i < 5000; i++) {
+            for (let i = 0; i < Constants.areaGrowPasses; i++) {
                 const newXPoint = GameUtil.getRandomInt(0, map.numberOfColumns);
                 const newYPoint = GameUtil.getRandomInt(0, map.numberOfRows);
                 const newBox = map.getBox(newXPoint, newYPoint);

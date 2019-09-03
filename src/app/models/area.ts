@@ -5,6 +5,7 @@ export class GameArea {
     name: string;
     type: string;
     boxes: GridBox[];
+    dangerArea = false;
 
     constructor(name: string, type: string, boxes: GridBox[]) {
         this.name = name;
@@ -31,5 +32,20 @@ export class GameArea {
 
     isRelated(box: GridBox) {
         return box && box.type === this.type;
+    }
+
+    checkIfEnemy() {
+        for (const box of this.boxes) {
+            if (box.isEnemy) {
+                this.dangerArea = true;
+                break;
+            }
+        }
+
+        if (this.dangerArea) {
+            for (const box of this.boxes) {
+                box.isEnemy = true;
+            }
+        }
     }
 }

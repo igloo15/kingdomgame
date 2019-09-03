@@ -3,6 +3,7 @@ import { GridBox, DirectionGridBox } from './grid-box';
 import { Constants } from './constants';
 import { MapGenerator } from './map-generator';
 import { GameArea } from './area';
+import { map } from 'd3';
 
 export class Map {
 
@@ -46,7 +47,8 @@ export class Map {
 
         for (let x = 0; x < this.numberOfColumns; x++) {
             for (let y = 0; y < this.numberOfRows; y++) {
-                this.boxes.push(new GridBox(x, y, this.gridSize));
+                const isEnemy = x === 0 || y === 0 || x === this.numberOfColumns - 1 || y === this.numberOfRows - 1;
+                this.boxes.push(new GridBox(x, y, this.gridSize, isEnemy));
             }
         }
 
@@ -103,7 +105,7 @@ export class Map {
             .attr('d', this.lineFunction)
             .attr('class', 'lineData')
             .attr('stroke', 'black')
-            .attr('stroke-width', 1.75)
+            .attr('stroke-width', 5)
             .attr('fill', 'none');
 
         lineGroup.exit().remove();
@@ -121,32 +123,12 @@ export class Map {
             .attr('height', this.gridSize)
             .attr('stroke', 'white')
             .attr('stroke-width', '1px')
-            .attr('fill', d => {
-                if (d.type === Constants.waterType) {
-                    return 'blue';
-                } else if (d.type === '') {
-                    return 'teal';
-                } else if (d.type === Constants.badlandType) {
-                    return '#581845';
-                } else {
-                    return 'white';
-                }
-            });
+            .attr('fill', d => d.getColor());
 
         currentGroup
             .transition()
-            .attr('fill', d => {
-                if (d.type === Constants.waterType) {
-                    return 'blue';
-                } else if (d.type === '') {
-                    return 'teal';
-                } else if (d.type === Constants.badlandType) {
-                    return '#581845';
-                } else {
-                    return 'white';
-                }
-            })
-            .delay((d, i) => d.drawDelay);
+            .attr('fill', d => d.getColor())
+            .delay(d => d.drawDelay);
 
         currentGroup.exit().remove();
     }
